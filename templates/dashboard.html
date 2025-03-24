@@ -1,0 +1,57 @@
+{{define "title"}}Dashboard - Norbert FTP Downloader{{end}}
+{{template "header" .}}
+ {{template "topMenu" .}}
+
+
+<div class="card">
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Welcome, {{.User.Email}}!</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Programs Section -->
+        <div class="card">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Programs</h2>
+            <div hx-get="/api/programs" 
+                 hx-trigger="load"
+                 hx-target="#programs-list">
+                <div class="animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+            </div>
+            <div id="programs-list" class="space-y-2"></div>
+        </div>
+
+        <!-- Shows Section -->
+        <div class="card">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Shows</h2>
+            <div hx-get="/api/shows" 
+                 hx-trigger="load"
+                 hx-target="#shows-list">
+                <div class="animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+            </div>
+            <div id="shows-list" class="space-y-2"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="card">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+            <div hx-get="/api/activity" 
+                 hx-trigger="load"
+                 hx-target="#activity-list">
+                <div class="animate-pulse">
+                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                    <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+                </div>
+            </div>
+            <div id="activity-list" class="space-y-2"></div>
+        </div>
+    </div>
+</div>
+
+{{template "footer" .}}

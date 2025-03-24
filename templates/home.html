@@ -1,0 +1,92 @@
+{{define "title"}}Home - Norbert {{end}}
+{{template "header" .}}
+{{template "topMenu" .}}
+<div class="flex items-center space-x-4">
+    {{if .User}}
+        <span class="text-gray-700">{{.User.Email}}</span>
+        <a href="/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</a>
+        <a href="/api/auth/logout" 
+           class="text-gray-600 hover:text-gray-900"
+           hx-post="/api/auth/logout"
+           hx-push-url="true">
+            Logout
+        </a>
+    {{else}}
+        <a href="/login" class="text-gray-600 hover:text-gray-900">Login</a>
+    {{end}}
+</div>
+
+
+<div class="relative isolate">
+    <!-- Background -->
+    <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+        <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-secondary opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+    </div>
+
+    <!-- Hero section -->
+    <div class="py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl text-center">
+                <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                    FTP File Downloader
+                </h1>
+                <p class="mt-6 text-lg leading-8 text-gray-600">
+                    Securely download and manage files from multiple FTP servers. Store and organize your files with ease.
+                </p>
+                <div class="mt-10 flex items-center justify-center gap-x-6">
+                    <a href="/login" class="btn-primary">
+                        Get Started
+                    </a>
+                    <a href="#features" class="text-sm font-semibold leading-6 text-gray-900">
+                        Learn more <span aria-hidden="true">→</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features section -->
+    <div id="features" class="py-24 sm:py-32">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl lg:text-center">
+                <h2 class="text-base font-semibold leading-7 text-primary">Faster downloads</h2>
+                <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                    Everything you need to manage FTP downloads
+                </p>
+                <p class="mt-6 text-lg leading-8 text-gray-600">
+                    Streamline your file management process with our powerful FTP downloader. Secure, efficient, and easy to use.
+                </p>
+            </div>
+            <div class="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-none">
+                <dl class="grid max-w-xl grid-cols-1 gap-x-8 gap-y-16 lg:max-w-none lg:grid-cols-3">
+                    <div class="card">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
+                            Secure Authentication
+                        </dt>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Built-in authentication system to ensure secure access to your files.
+                        </dd>
+                    </div>
+                    <div class="card">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
+                            Centralized Storage
+                        </dt>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Store all your files in one place with Supabase integration.
+                        </dd>
+                    </div>
+                    <div class="card">
+                        <dt class="text-base font-semibold leading-7 text-gray-900">
+                            Easy Management
+                        </dt>
+                        <dd class="mt-2 text-base leading-7 text-gray-600">
+                            Simple interface to manage and organize your downloaded files.
+                        </dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "footer" .}}
