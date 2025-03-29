@@ -64,7 +64,7 @@ Non-Functional Requirements
     • Maintainability: Use modular code design and proper documentation to ensure ease of maintenance and future enhancements
 
 Technical Architecture
-    • Frontend: A web interface built with html/htmx/tailwind served from Go Echo, that communicates with backend services
+    • Frontend: A web interface built with html/htmx/bootstrap served from Go Echo, that communicates with backend services
     • Backend/Serverless: Go Lang Functions that handle FTP connections, file processing, and interactions with Supabase (authentication, database, and storage)
     • Template System:
         • Technology: Go's native `html/template` package
@@ -74,14 +74,89 @@ Technical Architecture
             - Block definitions: `{{define "block_name"}}`
             - Block inclusion: `{{template "block_name" .}}`
         • Template Organization:
-            - Each page has its own template file
-            - Common blocks (title, nav, content) defined in each template
-            - Templates stored in `web/templates/` directory
+            - Templates stored in root-level `templates/` directory
+            - Boiler template pattern:
+                - `boiler.html` defines common blocks (header, footer, nav, topMenu)
+                - Individual page templates extend the boiler template
+                - Reduces code duplication and maintains consistency
+            - Common blocks:
+                - `header`: HTML head section and opening body tag
+                - `topMenu`: Main navigation menu
+                - `nav`: User-specific navigation elements
+                - `footer`: Closing body tag and footer content
+                - `title`: Defined in individual page templates
         • Template Features:
             - Safe HTML rendering
             - Template inheritance through blocks
             - Data passing using dot notation
             - Custom template functions support
+            - HTMX integration for dynamic interactions
+            - Bootstrap 5 for responsive styling and components
+            - Alpine.js for additional interactivity
+            - Modern responsive design with Bootstrap's grid system and utility classes
+            - Bootstrap components for consistent UI elements:
+                - Navigation bars and menus
+                - Cards for content organization
+                - Forms and input components
+                - Alerts and notifications
+                - Modal dialogs
+                - Responsive tables
+                - Custom CSS classes for specific styling needs
+            - Bootstrap utilities and components:
+                - Spacing utilities (e.g., `py-5`, `mb-4`, `gap-3`)
+                - Typography classes (e.g., `display-4`, `lead`, `h2`, `h5`)
+                - Placeholder components for loading states
+                - Grid system for responsive layouts
+                - Flexbox utilities for alignment
+                - Color and background utilities
+                - Border and shadow utilities
+        • Template Inheritance and Data Flow:
+            - Template Inheritance Pattern:
+                - Base template (`boiler.html`) defines common structure
+                - Page templates extend base template using `{{template "block_name" .}}`
+                - Each page can override specific blocks as needed
+                - Example structure:
+                    ```
+                    {{define "title"}}Page Title{{end}}
+                    {{template "header" .}}
+                    {{template "topMenu" .}}
+                    <!-- Page specific content -->
+                    {{template "footer" .}}
+                    ```
+            - Data Passing:
+                - Data is passed to templates using the dot notation (`.`)
+                - Common data structure includes:
+                    - User information: `{{.User.Email}}`
+                    - CSRF tokens: `{{.CSRFToken}}`
+                    - Page-specific data
+                - HTMX responses update specific elements using `hx-target`
+                - Example data usage:
+                    ```
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{.Title}}</h5>
+                            <p class="card-text">{{.Description}}</p>
+                        </div>
+                    </div>
+                    ```
+            - Component Integration:
+                - HTMX attributes work with Bootstrap components
+                - Example: Form submission with Bootstrap styling
+                    ```
+                    <form hx-post="/api/endpoint" 
+                          hx-target="#result"
+                          class="needs-validation">
+                        <div class="mb-3">
+                            <input type="text" 
+                                   class="form-control" 
+                                   required>
+                        </div>
+                        <button type="submit" 
+                                class="btn btn-primary">
+                            Submit
+                        </button>
+                    </form>
+                    ```
     • Supabase Integration:
         • Authentication: Managing user sessions
         • Database: Storing file metadata

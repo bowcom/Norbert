@@ -2,71 +2,71 @@
 {{template "header" .}}
 {{template "topMenu" .}}
 
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
-            <div>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Sign in to your account
-                </h2>
+<div class="container">
+    <div class="row justify-content-center align-items-center min-vh-75">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <h2 class="text-center mb-4">
+                        Sign in to your account
+                    </h2>
+                    <form hx-post="/api/auth/login" 
+                          hx-target="#error-message"
+                          hx-swap="innerHTML">
+                        <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input id="email" name="email" type="email" required 
+                                   class="form-control" 
+                                   placeholder="Email address"
+                                   autocomplete="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input id="password" name="password" type="password" required 
+                                   class="form-control" 
+                                   placeholder="Password"
+                                   autocomplete="current-password">
+                        </div>
+
+                        <div id="error-message" class="mb-3"></div>
+
+                        <button type="submit" 
+                                class="btn btn-primary w-100">
+                            Sign in
+                        </button>
+                    </form>
+                </div>
             </div>
-            <form hx-post="/api/auth/login" 
-                  hx-target="#error-message"
-                  hx-swap="innerHTML"
-                  class="mt-8 space-y-6">
-                <input type="hidden" name="_csrf" value="{{.CSRFToken}}">
-                <div class="rounded-md shadow-sm -space-y-px">
-                    <div>
-                        <label for="email" class="sr-only">Email address</label>
-                        <input id="email" name="email" type="email" required 
-                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm" 
-                               placeholder="Email address"
-                               autocomplete="email">
-                    </div>
-                    <div>
-                        <label for="password" class="sr-only">Password</label>
-                        <input id="password" name="password" type="password" required 
-                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm" 
-                               placeholder="Password"
-                               autocomplete="current-password">
-                    </div>
-                </div>
-
-                <div id="error-message"></div>
-
-                <div>
-                    <button type="submit" 
-                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-                        Sign in
-                    </button>
-                </div>
-            </form>
         </div>
     </div>
+</div>
 
-    <script>
-        document.body.addEventListener('htmx:afterRequest', function(evt) {
-            const errorMessage = document.getElementById('error-message');
-            
-            if (evt.detail.successful) {
-                try {
-                    const response = JSON.parse(evt.detail.xhr.response);
-                    if (response.token) {
-                        localStorage.setItem('token', response.token);
-                        window.location.href = '/dashboard';
-                    } else {
-                        errorMessage.innerHTML = '<div class="rounded-md bg-red-50 p-4 text-red-700">Invalid response from server</div>';
-                    }
-                } catch (e) {
-                    errorMessage.innerHTML = '<div class="rounded-md bg-red-50 p-4 text-red-700">Invalid response format</div>';
+<script>
+    document.body.addEventListener('htmx:afterRequest', function(evt) {
+        const errorMessage = document.getElementById('error-message');
+        
+        if (evt.detail.successful) {
+            try {
+                const response = JSON.parse(evt.detail.xhr.response);
+                if (response.token) {
+                    localStorage.setItem('token', response.token);
+                    window.location.href = '/dashboard';
+                } else {
+                    errorMessage.innerHTML = '<div class="alert alert-danger">Invalid response from server</div>';
                 }
-            } else {
-                try {
-                    const response = JSON.parse(evt.detail.xhr.response);
-                    errorMessage.innerHTML = `<div class="rounded-md bg-red-50 p-4 text-red-700">${response.error || 'An error occurred'}</div>`;
-                } catch (e) {
-                    errorMessage.innerHTML = '<div class="rounded-md bg-red-50 p-4 text-red-700">An error occurred while processing your request</div>';
-                }
+            } catch (e) {
+                errorMessage.innerHTML = '<div class="alert alert-danger">Invalid response format</div>';
             }
-        });
-    </script>
+        } else {
+            try {
+                const response = JSON.parse(evt.detail.xhr.response);
+                errorMessage.innerHTML = `<div class="alert alert-danger">${response.error || 'An error occurred'}</div>`;
+            } catch (e) {
+                errorMessage.innerHTML = '<div class="alert alert-danger">An error occurred while processing your request</div>';
+            }
+        }
+    });
+</script>
+
 {{template "footer" .}}
